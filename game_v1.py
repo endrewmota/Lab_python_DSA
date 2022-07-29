@@ -1,9 +1,11 @@
 # Game Ping-Pong
 
+#Importação de classes
 from tkinter import *
 import random
 import time
 
+# Variavel level recebendo uma entrada de dados como string e transformando para um tipo inteiro
 level = int(input("Qual nível você gostaria de jogar? 1/2/3/4/5 \n"))
 length = 500/level
 
@@ -22,7 +24,9 @@ root.update()
 count = 0
 lost = False
 
+# Criação da classe bola
 class Bola:
+    #Definição de uma função para movimentação da barra
     def __init__(self, canvas, Barra, color):
         self.canvas = canvas
         self.Barra = Barra
@@ -43,30 +47,31 @@ class Bola:
         self.canvas.move(self.id, self.x, self.y)
 
         pos = self.canvas.coords(self.id)
-
+        # Condicional IF
         if pos[1] <= 0:
             self.y = 3
-
+        # Condicional IF    
         if pos[3] >= self.canvas_height:
             self.y = -3
-
+        # Condicional IF
         if pos[0] <= 0:
             self.x = 3
-            
+        # Condicional IF    
         if pos[2] >= self.canvas_width:
             self.x = -3
 
         self.Barra_pos = self.canvas.coords(self.Barra.id)
 
-
+        # Condicional IF
         if pos[2] >= self.Barra_pos[0] and pos[0] <= self.Barra_pos[2]:
+            # Condicional IF dentro de outro IF
             if pos[3] >= self.Barra_pos[1] and pos[3] <= self.Barra_pos[3]:
                 self.y = -3
                 global count
                 count +=1
                 score()
 
-
+        # Condicional IF/ELSE
         if pos[3] <= self.canvas_height:
             self.canvas.after(10, self.draw)
         else:
@@ -74,8 +79,9 @@ class Bola:
             global lost
             lost = True
 
-
+# Criação da classe da Barra
 class Barra:
+    # Definindo a função para a Barra
     def __init__(self, canvas, color):
         self.canvas = canvas
         self.id = canvas.create_rectangle(0, 0, length, 10, fill=color)
@@ -92,27 +98,29 @@ class Barra:
         self.canvas.move(self.id, self.x, 0)
 
         self.pos = self.canvas.coords(self.id)
-
+        # Condicional IF
         if self.pos[0] <= 0:
             self.x = 0
-        
+        # Condicional IF
         if self.pos[2] >= self.canvas_width:
             self.x = 0
         
         global lost
         
+        # Condicional IF
         if lost == False:
             self.canvas.after(10, self.draw)
 
+    # Função para mover para a esquerda
     def move_left(self, event):
         if self.pos[0] >= 0:
             self.x = -3
-
+    # Função para mover para a direita
     def move_right(self, event):
         if self.pos[2] <= self.canvas_width:
             self.x = 3
 
-
+# Função para iniciar o jogo
 def start_game(event):
     global lost, count
     lost = False
@@ -124,10 +132,10 @@ def start_game(event):
     Barra.draw()
     Bola.draw()
 
-
+# Função para acrescentar os pontos
 def score():
     canvas.itemconfig(score_now, text="Pontos: " + str(count))
-
+# Função para fim do jogo
 def game_over():
     canvas.itemconfig(game, text="Game over!")
 
